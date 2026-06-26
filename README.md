@@ -3,6 +3,13 @@
 A friendly, click-driven installer for the Phenom developer environment on the **Mac Studio**.
 No Terminal typing required.
 
+## Before you start
+
+Log in to the Mac Studio as the **account your team uses for builds** (the one that has
+OrbStack). Everything is built and run under that account, through its OrbStack. The installer
+confirms which account you are on and will not proceed on the wrong one. If OrbStack is not
+running, it offers to start it for you.
+
 ## Get it
 
 Download the latest launcher:
