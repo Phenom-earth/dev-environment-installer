@@ -47,13 +47,14 @@ $2"; exit 1; }
 # ---- 0. welcome ----------------------------------------------------------------------------
 confirm "Welcome. This will set up the Phenom developer environment on this Mac.\n\nIt takes a few minutes and will ask you a few questions with simple dialogs. You will not need to type any commands.\n\nClick Continue to begin." || { say "user cancelled at welcome"; exit 0; }
 
-# ---- 0.5 confirm the BUILD/ORBSTACK macOS account ------------------------------------------
+# ---- 0.5 confirm the current macOS / OrbStack account --------------------------------------
 # Everything here (builds, containers, the voice services, the saved credentials) runs under
 # the macOS account that is logged in right now, through THAT account's OrbStack. It must be
 # the account the team uses for builds, or the whole environment lands in the wrong place.
+# We never assume the account's name; we read it live and ask the operator to confirm it.
 CUR_USER="$(id -un)"
-confirm "You are logged in to this Mac as:\n\n    $CUR_USER\n\nEverything will be built and run under THIS account, using its copy of OrbStack. It must be the account your team uses for builds and containers.\n\nIf this is NOT the build account, click Cancel, log out, log back in as the build account, and open this installer again.\n\nIs \"$CUR_USER\" the correct build account?" \
-  || { info "No problem. Log in as the build account, then open this installer again."; say "wrong user ($CUR_USER); user cancelled"; exit 0; }
+confirm "You are logged in to this Mac as:\n\n    $CUR_USER\n\nEverything will be built and run under THIS account, using its copy of OrbStack. It must be the account your team uses for builds and containers.\n\nIf \"$CUR_USER\" is NOT that account, click Cancel, log out, log back in as the correct account, and open this installer again.\n\nIs \"$CUR_USER\" the account you build and run containers under?" \
+  || { info "No problem. Log out, log back in as the account your team builds under, then open this installer again."; say "wrong user ($CUR_USER); user cancelled"; exit 0; }
 
 say "ensuring OrbStack is running for $CUR_USER"
 if ! command -v docker >/dev/null 2>&1 || ! docker info >/dev/null 2>&1; then
@@ -63,7 +64,7 @@ if ! command -v docker >/dev/null 2>&1 || ! docker info >/dev/null 2>&1; then
     for i in $(seq 1 45); do docker info >/dev/null 2>&1 && break; sleep 2; done
     docker info >/dev/null 2>&1 || abort "OrbStack did not finish starting in time." "OrbStack not ready for $CUR_USER after waiting; open it, wait until ready, re-run"
   else
-    abort "OrbStack is not installed for this account ($CUR_USER). It is required to run the containers." "OrbStack.app not found for $CUR_USER; install OrbStack as the build account first"
+    abort "OrbStack is not installed for this account ($CUR_USER). It is required to run the containers." "OrbStack.app not found for $CUR_USER; install OrbStack under this account ($CUR_USER) first"
   fi
 fi
 say "OrbStack is running for $CUR_USER"
