@@ -53,7 +53,7 @@ confirm "Welcome. This will set up the Phenom developer environment on this Mac.
 # the account the team uses for builds, or the whole environment lands in the wrong place.
 # We never assume the account's name; we read it live and ask the operator to confirm it.
 CUR_USER="$(id -un)"
-confirm "You are logged in to this Mac as:\n\n    $CUR_USER\n\nEverything will be built and run under THIS account, using its copy of OrbStack. It must be the account your team uses for builds and containers.\n\nIf \"$CUR_USER\" is NOT that account, click Cancel, log out, log back in as the correct account, and open this installer again.\n\nIs \"$CUR_USER\" the account you build and run containers under?" \
+confirm "You are logged in to this Mac as:\n\n    $CUR_USER\n\nEverything will be built and run under THIS account, using its copy of OrbStack. It must be the account your team uses for builds and containers.\n\nIf '$CUR_USER' is NOT that account, click Cancel, log out, log back in as the correct account, and open this installer again.\n\nIs '$CUR_USER' the account you build and run containers under?" \
   || { info "No problem. Log out, log back in as the account your team builds under, then open this installer again."; say "wrong user ($CUR_USER); user cancelled"; exit 0; }
 
 say "ensuring OrbStack is running for $CUR_USER"
